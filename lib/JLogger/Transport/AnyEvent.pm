@@ -11,6 +11,7 @@ sub init {
     my $self = shift;
 
     my $component = AnyEvent::XMPP::Component->new(
+        domain => $self->domain,
         host   => $self->host,
         port   => $self->port,
         secret => $self->secret,

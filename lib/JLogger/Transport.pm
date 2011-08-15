@@ -8,9 +8,14 @@ require Carp;
 sub new {
     my ($class, %args) = @_;
 
-    Carp::croak('"host" required')   unless exists $args{host};
-    Carp::croak('"port" required')   unless exists $args{port};
-    Carp::croak('"secret" required') unless exists $args{secret};
+    Carp::croak('Required "host" argument missing!')
+      unless exists $args{host};
+
+    Carp::croak('Required "port" argument missing!')
+      unless exists $args{port};
+
+    Carp::croak('Required "secret" argument missing!')
+      unless exists $args{secret};
 
     my $self = bless {%args}, $class;
 
@@ -18,6 +23,8 @@ sub new {
 
     $self;
 }
+
+sub domain { $_[0]->{domain} }
 
 sub host { $_[0]->{host} }
 

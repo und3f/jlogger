@@ -7,8 +7,8 @@ use Test::More tests => 2;
 
 use_ok 'JLogger::Transport::AnyEvent';
 
-my $transport = new_ok 'JLogger::Transport::AnyEvent', [
-    host => '127.0.0.1',
-    port => 5520,
+my $transport = new_ok 'JLogger::Transport::AnyEvent',
+  [ host => 'localhost',
+    port   => 5520,
     secret => 'secret',
-];
+  ];
