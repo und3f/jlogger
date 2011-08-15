@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use DBI;
 use File::Temp;
@@ -36,6 +36,7 @@ my $message = {
     'id'           => 'message_id',
     'message_type' => 'chat',
     'body'         => 'body text',
+    'thread'       => 'thread1',
 };
 $storage->store($message);
 
@@ -47,3 +48,4 @@ is $row->{recipient}, $message->{to},           'message recipient';
 is $row->{sender},    $message->{from},         'message sender';
 is $row->{type},      $message->{message_type}, 'message type';
 is $row->{body},      $message->{body},         'message body';
+is $row->{thread},    $message->{thread},       'message thread';

@@ -5,6 +5,7 @@ CREATE TABLE `messages` (
     `id`        VARCHAR(255) DEFAULT NULL,
     `type`      VARCHAR(255) DEFAULT NULL,
     `body`      TEXT,
+    `thread`    VARCHAR(255) DEFAULT NULL,
 
     `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );

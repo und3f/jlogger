@@ -30,12 +30,12 @@ sub _save_message {
 
     my $sql = <<'SQL';
 INSERT
-    INTO messages(sender, recipient, id, type, body)
-VALUES(?, ?, ?, ?, ?)
+    INTO messages(sender, recipient, id, type, body, thread)
+VALUES(?, ?, ?, ?, ?, ?)
 SQL
 
     $self->{_dbh}
-      ->do($sql, undef, @{$message}{qw/from to id message_type body/});
+      ->do($sql, undef, @{$message}{qw/from to id message_type body thread/});
 }
 
 1;
