@@ -1,0 +1,17 @@
+NAME
+    JLogger - jabber messages logger
+
+DESCRIPTION
+    JLogger is a highly customizable jabber transport for logging messages
+    passed over jabber server. It has different kind of filters and
+    possibilities to save captured messages.
+
+AUTHOR
+    Sergey Zasenko
+
+COPYRIGHT AND LICENSE
+    Copyright (C) 2011, Sergey Zasenko.
+
+    This program is free software, you can redistribute it and/or modify it
+    under the same terms as Perl 5.10.
+
