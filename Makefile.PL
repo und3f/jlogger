@@ -11,4 +11,6 @@ requires 'DBI';
 
 test_requires 'DBD::SQLite';
 
+install_script 'script/jlogger';
+
 WriteAll;
