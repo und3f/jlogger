@@ -9,6 +9,8 @@ use FindBin '$Bin';
 use JLogger;
 use JLogger::Config;
 
+$0 = 'jlogger';
+
 my $cv = AnyEvent->condvar;
 
 my $config_file = '/etc/jlogger.yaml';
