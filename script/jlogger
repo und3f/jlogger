@@ -25,7 +25,10 @@ my $logger = JLogger->new(%$config);
 my $w;
 $logger->on_disconnect(
     sub {
+        my $logger = shift;
+
         warn "Server has gone away...\n";
+
         $w = AnyEvent->timer(
             after => $config->{reconnect_interval} || 15,
             cb => sub {

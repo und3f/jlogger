@@ -26,6 +26,7 @@ sub connect {
             $self->_recv_stanza_xml(@_);
         },
         disconnect => sub {
+            delete $self->{component};
             $self->on_disconnect->($self);
         }
     );
@@ -34,7 +35,9 @@ sub connect {
 }
 
 sub disconnect {
-    $_[0]->{component}->disconnect;
+    if (my $component = delete $_[0]->{component}) {
+        $component->disconnect;
+    }
 }
 
 sub _recv_stanza_xml {

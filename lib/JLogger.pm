@@ -8,6 +8,7 @@ $VERSION = eval $VERSION;
 
 require Carp;
 use Class::Load 'load_class';
+use Scalar::Util 'weaken';
 
 sub new {
     my ($class, %args) = @_;
@@ -37,10 +38,11 @@ sub transport {
 
     return $self->{transport} unless defined $transport_data;
 
+    weaken $self;
     $self->{transport} = $self->build_element(
         $transport_data,
         on_message    => sub { $self->_on_message($_[1]) },
-        on_disconnect => sub { $self->on_disconnect->() },
+        on_disconnect => sub { $self->on_disconnect->($self) },
     );
 }
 
