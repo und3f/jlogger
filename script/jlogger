@@ -11,7 +11,12 @@ use JLogger::Config;
 
 my $cv = AnyEvent->condvar;
 
-my $config = JLogger::Config->new->load_file("$Bin/../config.yaml");
+my $config_file = '/etc/jlogger.yaml';
+if (@ARGV > 0) {
+    $config_file = $ARGV[0];
+}
+
+my $config = JLogger::Config->new->load_file($config_file);
 my $logger = JLogger->new(%$config);
 
 $logger->connect;
