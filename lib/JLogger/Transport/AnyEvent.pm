@@ -7,7 +7,7 @@ use base 'JLogger::Transport';
 
 use AnyEvent::XMPP::Component;
 
-sub init {
+sub connect {
     my $self = shift;
 
     my $component = AnyEvent::XMPP::Component->new(
@@ -19,17 +19,18 @@ sub init {
 
     $self->{component} = $component;
 
-    $component->reg_cb(error => sub { $self->_error($_[1]) });
     $component->reg_cb(
+        error           => sub { $self->_error($_[1]) },
         recv_stanza_xml => sub {
             shift @_;
             $self->_recv_stanza_xml(@_);
+        },
+        disconnect => sub {
+            $self->on_disconnect->($self);
         }
     );
-}
 
-sub connect {
-    $_[0]->{component}->connect;
+    $component->connect;
 }
 
 sub disconnect {

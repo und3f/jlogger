@@ -19,7 +19,21 @@ if (@ARGV > 0) {
 }
 
 my $config = JLogger::Config->new->load_file($config_file);
+
 my $logger = JLogger->new(%$config);
+
+my $w;
+$logger->on_disconnect(
+    sub {
+        warn "Server has gone away...\n";
+        $w = AnyEvent->timer(
+            after => $config->{reconnect_interval} || 15,
+            cb => sub {
+                $logger->connect;
+            }
+        );
+    }
+);
 
 $logger->connect;
 

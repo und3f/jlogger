@@ -26,6 +26,9 @@ sub new {
 
     $self->storages(delete $args{storages} || []);
 
+    $self->{on_disconnect} =
+      exists $args{on_disconnect} ? $args{on_disconnect} : sub { };
+
     $self;
 }
 
@@ -34,9 +37,11 @@ sub transport {
 
     return $self->{transport} unless defined $transport_data;
 
-    $self->{transport} =
-      $self->build_element($transport_data,
-        on_message => sub { $self->_on_message($_[1]) });
+    $self->{transport} = $self->build_element(
+        $transport_data,
+        on_message    => sub { $self->_on_message($_[1]) },
+        on_disconnect => sub { $self->on_disconnect->() },
+    );
 }
 
 sub handlers {
@@ -73,8 +78,16 @@ sub storages {
     }
 }
 
+sub on_disconnect {
+    @_ > 1 ? $_[0]->{on_disconnect} = $_[1] : $_[0]->{on_disconnect};
+}
+
 sub connect {
     $_[0]->transport->connect;
+}
+
+sub disconnect {
+    $_[0]->transport->disconnect;
 }
 
 sub build_element {

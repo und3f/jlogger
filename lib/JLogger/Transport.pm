@@ -17,6 +17,8 @@ sub new {
     Carp::croak('Required "secret" argument missing!')
       unless exists $args{secret};
 
+    $args{on_disconnect} ||= sub {};
+
     my $self = bless {%args}, $class;
 
     $self->init;
@@ -33,7 +35,11 @@ sub port { $_[0]->{port} }
 sub secret { $_[0]->{secret} }
 
 sub on_message {
-    @_ > 1 ? $_->[0]->{on_message} = $_[1] : $_[0]->{on_message};
+    @_ > 1 ? $_[0]->{on_message} = $_[1] : $_[0]->{on_message};
+}
+
+sub on_disconnect {
+    @_ > 1 ? $_[0]->{on_disconnect} = $_[1] : $_[0]->{on_disconnect};
 }
 
 sub init {
