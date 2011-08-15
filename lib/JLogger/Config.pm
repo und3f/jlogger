@@ -14,7 +14,6 @@ sub load {
 
     my $config = YAML::Load($config_text);
 
-    my @elements;
     $self->_fix_element($config, 'transport');
     $self->_fix_elements($config, 'storages');
     $self->_fix_elements($config, 'filters');
