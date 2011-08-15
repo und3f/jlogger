@@ -4,12 +4,9 @@ use strict;
 use warnings;
 
 use FindBin '$Bin';
-use lib "$Bin/lib/";
-
-use FindBin '$Bin';
+use lib "$Bin/../lib/";
 
 use AnyEvent;
-use Class::Load 'load_class';
 
 use JLogger;
 use JLogger::Config;
