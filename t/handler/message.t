@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use AnyEvent::XMPP::Parser;
 
@@ -33,7 +33,7 @@ $parser->feed(<<'XML');
     to='receiver@domain.com/resource'
     type='chat'
     id='id1'>
-  <active xmlns='http://jabber.org/protocol/chatstates'/>
+  <thread>thread1</thread>
   <body>body text</body>
 </message>
 XML
@@ -45,6 +45,7 @@ is $message->{type}, 'message',                      'message type';
 is $message->{message_type}, 'chat',      'message message_type';
 is $message->{id},           'id1',       'message id';
 is $message->{body},         'body text', 'message body';
+is $message->{thread},       'thread1',   'message thread';
 
 $parser->feed(<<'XML');
 <message

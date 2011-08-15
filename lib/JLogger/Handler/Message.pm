@@ -14,11 +14,17 @@ sub handle {
             to   => $node->attr('to'),
             type => 'message',
 
-            id   => $node->attr('id'),
+            id           => $node->attr('id'),
             message_type => $node->attr('type'),
-            body => $body_node->text,
+            body         => $body_node->text,
         };
-        return $message
+
+        if (my $thread_node = ($node->find_all(['component' => 'thread']))[0])
+        {
+            $message->{thread} = $thread_node->text;
+        }
+
+        return $message;
     }
 
     # Ignore empty messages
