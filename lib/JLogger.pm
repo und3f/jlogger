@@ -133,6 +133,20 @@ JLogger is a highly customizable jabber transport for logging messages passed
 over jabber server. It has different kind of filters and possibilities to save
 captured messages.
 
+=head1 SERVER CONFIGURATION
+
+=head2 ejabberd
+
+Edit ejabberd.cfg and add this line to the 'modules' section:
+
+{mod_service_log, [{loggers, ["jlogger.jabber.myserver.com"]}]},
+
+Add this to 'listen' section to make ejabberd listen for JLogger connections:
+
+{5526, ejabberd_service, [{ip, {127, 0, 0, 1}}, {access, all}, 
+                          {hosts, ["jlogger.jabber.myserver.com"], 
+                          [{password, "secret"}]}]},
+
 =head1 AUTHOR
 
 Sergey Zasenko
