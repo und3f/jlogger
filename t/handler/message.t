@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use AnyEvent::XMPP::Parser;
 
@@ -45,3 +45,13 @@ is $message->{type}, 'message',                      'message type';
 is $message->{message_type}, 'chat',      'message message_type';
 is $message->{id},           'id1',       'message id';
 is $message->{body},         'body text', 'message body';
+
+$parser->feed(<<'XML');
+<message
+    from='sender@domain.com'
+    to='receiver@domain.com'>
+  <composing xmlns='http://jabber.org/protocol/chatstates'/>
+</message>
+XML
+
+is $message, undef, 'empty message';

@@ -93,10 +93,10 @@ sub _on_message {
 
     foreach my $node ($node->nodes) {
         if (my $handler = $self->{handlers}->{$node->name}) {
-            my $data = $handler->handle($node);
-
-            unless ($self->_check_filters($data)) {
-                $self->_store_result($data);
+            if (my $data = $handler->handle($node)) {
+                unless ($self->_check_filters($data)) {
+                    $self->_store_result($data);
+                }
             }
         }
     }
