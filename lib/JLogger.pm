@@ -139,13 +139,17 @@ captured messages.
 
 Edit ejabberd.cfg and add this line to the 'modules' section:
 
-{mod_service_log, [{loggers, ["jlogger.jabber.myserver.com"]}]},
+    {mod_service_log, [{loggers, ["jlogger.jabber.myserver.com"]}]},
 
 Add this to 'listen' section to make ejabberd listen for JLogger connections:
 
-{5526, ejabberd_service, [{ip, {127, 0, 0, 1}}, {access, all}, 
-                          {hosts, ["jlogger.jabber.myserver.com"], 
-                          [{password, "secret"}]}]},
+    {5526, ejabberd_service, [
+        {ip, {127, 0, 0, 1}},
+        {access, all}, 
+        {hosts,
+            ["jlogger.jabber.myserver.com"], 
+            [{password, "secret"}]}
+        ]},
 
 =head1 AUTHOR
 
