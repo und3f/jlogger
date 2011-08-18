@@ -1,6 +1,18 @@
+CREATE TABLE "identificators" (
+    "id"    SERIAL PRIMARY KEY,
+    "jid"   VARCHAR(255) NOT NULL,
+
+    UNIQUE("jid")
+);
+
 CREATE TABLE "messages" (
-    "sender"    VARCHAR(255) NOT NULL DEFAULT '',
-    "recipient" VARCHAR(255) NOT NULL DEFAULT '',
+    "sender"    INTEGER
+        REFERENCES "identificators"("id"),
+    "sender_resource" VARCHAR(255) DEFAULT '',
+
+    "recipient" INTEGER
+        REFERENCES "identificators"("id"),
+    "recipient_resource" VARCHAR(255) DEFAULT '',
 
     "id"        VARCHAR(255) DEFAULT NULL,
     "type"      VARCHAR(255) DEFAULT NULL,

@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use base 'JLogger::Storage';
+
 use DBI;
 
 my %handlers = (message => \&_save_message);
@@ -14,6 +15,8 @@ sub init {
     $self->{_dbh} =
       DBI->connect($self->{source}, $self->{username}, $self->{password},
         {RaiseError => 1, AutoCommit => 1, %{$self->{attr} || {}}});
+
+    $self->{_jid_cache} = {};
 }
 
 sub store {
@@ -28,14 +31,50 @@ sub store {
 sub _save_message {
     my ($self, $message) = @_;
 
+    my ($sender,    $sender_resource)    = split '/', $message->{from}, 2;
+    my ($recipient, $recipient_resource) = split '/', $message->{to},   2;
+
     my $sql = <<'SQL';
 INSERT
-    INTO messages(sender, recipient, id, type, body, thread)
-VALUES(?, ?, ?, ?, ?, ?)
+    INTO messages(
+        sender, sender_resource, recipient, recipient_resource,
+        id, type, body, thread)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?)
 SQL
 
+    $self->{_dbh}->do(
+        $sql,                           undef,
+        $self->_get_jid_id($sender),    $sender_resource,
+        $self->_get_jid_id($recipient), $recipient_resource,
+        @{$message}{qw/id message_type body thread/}
+    );
+}
+
+sub _get_jid_id {
+    my ($self, $jid) = @_;
+
+    if (my $id = $self->{_cache}->{$jid}) {
+        return $id;
+    }
+
+    my $id =
+      $self->{_dbh}
+      ->selectrow_array('SELECT id FROM identificators WHERE jid = ?',
+        undef, $jid);
+    unless (defined $id) {
+        $id = $self->_create_jid($jid);
+    }
+
+    $self->{_cache}->{$jid} = $id;
+}
+
+sub _create_jid {
+    my ($self, $jid) = @_;
+
     $self->{_dbh}
-      ->do($sql, undef, @{$message}{qw/from to id message_type body thread/});
+      ->do('INSERT INTO identificators(jid) VALUES(?)', undef, $jid);
+
+    $self->{_dbh}->last_insert_id(undef, undef, 'identificators', undef);
 }
 
 1;

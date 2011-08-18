@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use DBI;
 use File::Temp;
@@ -11,7 +11,7 @@ use FindBin '$Bin';
 
 my $tf = File::Temp->new;
 
-my $source = "dbi:SQLite:$tf->filename";
+my $source = 'dbi:SQLite:' . $tf->filename;
 
 # Prepare database
 my $schema_file = "$Bin/../../schema/database.sqlite.sql";
@@ -30,7 +30,7 @@ use_ok 'JLogger::Storage::DB';
 my $storage = new_ok 'JLogger::Storage::DB', [source => $source];
 
 my $message = {
-    'to'           => 'rec@server.com',
+    'to'           => 'rec@server.com/res1',
     'from'         => 'sender@server.com',
     'type'         => 'message',
     'id'           => 'message_id',
@@ -40,12 +40,24 @@ my $message = {
 };
 $storage->store($message);
 
-my $sth = $dbh->prepare('SELECT * FROM messages');
+my $sth = $dbh->prepare(<<'SQL');
+SELECT 
+    sender.jid || COALESCE('/' || sender_resource, '') AS sender,
+    recipient.jid || COALESCE('/' || recipient_resource, '') AS recipient,
+    message.id, message.type, message.body, message.thread
+FROM messages message
+JOIN identificators sender
+    ON sender.id = message.sender
+JOIN identificators recipient
+    ON recipient.id = message.recipient
+SQL
+
 $sth->execute;
 my $row = $sth->fetchrow_hashref;
 
 is $row->{recipient}, $message->{to},           'message recipient';
 is $row->{sender},    $message->{from},         'message sender';
+is $row->{id},        $message->{id},           'message id';
 is $row->{type},      $message->{message_type}, 'message type';
 is $row->{body},      $message->{body},         'message body';
 is $row->{thread},    $message->{thread},       'message thread';
