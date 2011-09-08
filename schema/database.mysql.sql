@@ -17,11 +17,11 @@ CREATE TABLE `messages` (
     `body`      TEXT,
     `thread`    VARCHAR(255) DEFAULT NULL,
 
-    `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    `timestamp` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     FOREIGN KEY(`sender`)
         REFERENCES `identificators`(`id`),
 
     FOREIGN KEY(`recipient`)
-        REFERENCES `identificators`(`id`),
+        REFERENCES `identificators`(`id`)
 ) DEFAULT CHARSET=utf8;
