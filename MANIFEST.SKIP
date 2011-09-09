@@ -7,3 +7,4 @@
 \.bak$
 \.swp$
 MYMETA
+^config.yaml$
