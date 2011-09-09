@@ -13,4 +13,8 @@ test_requires 'DBD::SQLite';
 
 install_script 'script/jlogger';
 
+resources
+  bugtracker => 'https://github.com/und3f/jlogger/issues',
+  repository => 'https://github.com/und3f/jlogger';
+
 WriteAll;
