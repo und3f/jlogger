@@ -3,7 +3,7 @@ package JLogger;
 use strict;
 use warnings;
 use 5.008_001;
-our $VERSION = '1.000';
+our $VERSION = '1.001';
 $VERSION = eval $VERSION;
 
 require Carp;

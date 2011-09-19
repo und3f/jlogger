@@ -5,15 +5,16 @@ use warnings;
 
 use base 'JLogger::Storage';
 
-use DBI;
+use DBIx::Connector;
 
 my %handlers = (message => \&_save_message);
 
 sub init {
     my $self = shift;
 
-    $self->{_dbh} =
-      DBI->connect($self->{source}, $self->{username}, $self->{password},
+    $self->{_connector} =
+      DBIx::Connector->new($self->{source}, $self->{username},
+        $self->{password},
         {RaiseError => 1, AutoCommit => 1, %{$self->{attr} || {}}});
 
     $self->{_jid_cache} = {};
@@ -42,7 +43,7 @@ INSERT
 VALUES(?, ?, ?, ?, ?, ?, ?, ?)
 SQL
 
-    $self->{_dbh}->do(
+    $self->{_connector}->dbh->do(
         $sql,                           undef,
         $self->_get_jid_id($sender),    $sender_resource,
         $self->_get_jid_id($recipient), $recipient_resource,
@@ -58,8 +59,8 @@ sub _get_jid_id {
     }
 
     my $id =
-      $self->{_dbh}
-      ->selectrow_array('SELECT id FROM identificators WHERE jid = ?',
+      $self->{_connector}
+      ->dbh->selectrow_array('SELECT id FROM identificators WHERE jid = ?',
         undef, $jid);
     unless (defined $id) {
         $id = $self->_create_jid($jid);
@@ -71,10 +72,10 @@ sub _get_jid_id {
 sub _create_jid {
     my ($self, $jid) = @_;
 
-    $self->{_dbh}
-      ->do('INSERT INTO identificators(jid) VALUES(?)', undef, $jid);
+    my $dbh = $self->{_connector}->dbh;
 
-    $self->{_dbh}->last_insert_id(undef, undef, 'identificators', undef);
+    $dbh->do('INSERT INTO identificators(jid) VALUES(?)', undef, $jid);
+    $dbh->last_insert_id(undef, undef, 'identificators', undef);
 }
 
 1;

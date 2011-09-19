@@ -8,6 +8,7 @@ requires 'AnyEvent::XMPP';
 requires 'Class::Load';
 requires 'YAML';
 requires 'DBI';
+requires 'DBIx::Connector';
 
 test_requires 'DBD::SQLite';
 
