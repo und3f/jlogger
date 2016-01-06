@@ -6,13 +6,15 @@ CREATE TABLE `identificators` (
 );
 
 CREATE TABLE `messages` (
+    `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
+
     `sender`    INTEGER,
     `sender_resource` VARCHAR(255) DEFAULT '',
 
     `recipient` INTEGER,
     `recipient_resource` VARCHAR(255) DEFAULT '',
 
-    `id`        VARCHAR(255) DEFAULT NULL,
+    `chat_id`   VARCHAR(255) DEFAULT NULL,
     `type`      VARCHAR(255) DEFAULT NULL,
     `body`      TEXT,
     `thread`    VARCHAR(255) DEFAULT NULL,
