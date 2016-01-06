@@ -34,18 +34,16 @@ ok !$filter_and->filter({from => 'bar@foo.com', to => 'baz@foo.com', %message});
 ok $filter_and->filter({from => 'bar@foo.com', to => 'baz@foo.com', %message});
 ok $filter_and->filter({from => 'baz@foo.com', to => 'baz@foo.com', %message});
 
-# A little bit strange rule jost for test
-# pass message from bar@.. or any not duplicate message
 my $filter_or = new_ok 'JLogger::Filter::or',
     [
         filters => [
             ['JLogger::Filter::FieldRegexp' => {fields => { from => '^bar@*'}}],
-            ['JLogger::Filter::Duplicate'],
+            ['JLogger::Filter::FieldRegexp' => {fields => { from => '^otherbar@*'}}],
         ],
     ];
 
-ok !$filter_or->filter({from => 'baz@foo.com', to => 'baz@foo.com', %message});
-ok $filter_or->filter({from => 'baz@foo.com', to => 'baz@foo.com', %message});
 ok !$filter_or->filter({from => 'bar@foo.com', to => 'baz@foo.com', %message});
+ok !$filter_or->filter({from => 'otherbar@foo.com', to => 'baz@foo.com', %message});
+ok $filter_or->filter({from => 'baz@foo.com', to => 'baz@foo.com', %message});
 
 done_testing;
