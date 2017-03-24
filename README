@@ -25,6 +25,11 @@ SERVER CONFIGURATION
                 "jlogger.example.com":
                     password: "secret"
 
+    You may find simple configuration in config.yaml.example. To log
+    messages on old ejabberd < 17.04 server please use transport
+    "JLogger::Transport::AnyEvent" instead of
+    "JLogger::Transport::AnyEvent::XEP0297"
+
 AUTHOR
     Sergey Zasenko
 

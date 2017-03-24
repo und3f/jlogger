@@ -168,6 +168,11 @@ Add this to the C<listen> section to make ejabberd listen for JLogger connection
             "jlogger.example.com":
                 password: "secret"
 
+You may find simple configuration in F<config.yaml.example>.
+To log messages on old ejabberd < 17.04 server please use transport
+C<JLogger::Transport::AnyEvent> instead of
+C<JLogger::Transport::AnyEvent::XEP0297>
+
 =head1 AUTHOR
 
 Sergey Zasenko
