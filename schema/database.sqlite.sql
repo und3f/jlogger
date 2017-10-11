@@ -6,8 +6,6 @@ CREATE TABLE `identificators` (
 );
 
 CREATE TABLE `messages` (
-    `id`        INTEGER PRIMARY KEY AUTOINCREMENT,
-
     `sender`    INTEGER,
     `sender_resource` VARCHAR(255) DEFAULT '',
 

@@ -6,8 +6,6 @@ CREATE TABLE `identificators` (
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE `messages` (
-    `id`        INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-
     `sender`    INTEGER,
     `sender_resource` VARCHAR(255) DEFAULT '',
 
